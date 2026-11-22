@@ -1,5 +1,5 @@
 
-}#ifndef PLANIFICADOR_RR_H
+#ifndef PLANIFICADOR_RR_H
 #define PLANIFICADOR_RR_H
 
 #include "Bloque.h"

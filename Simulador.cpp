@@ -1,4 +1,5 @@
 #include "Simulador.h"
+#include "InterfazConsola.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -22,13 +23,17 @@ void Simulador::leerControlesEnVivo() {
         if (tecla == '+' || tecla == '=') {
             if (velocidadMs > 200) {
                 velocidadMs -= 200;
+                cout << ">> Velocidad aumentada (Pausa actual: " << velocidadMs << " ms)\n";
+            } else {
+                cout << ">> Ya estas en la velocidad maxima (200 ms)\n";
             }
-            cout << ">> Velocidad aumentada (Pausa actual: " << velocidadMs << " ms)\n";
         } else if (tecla == '-') {
             if (velocidadMs < 5000) {
                 velocidadMs += 200;
+                cout << ">> Velocidad reducida (Pausa actual: " << velocidadMs << " ms)\n";
+            } else {
+                cout << ">> Ya estas en la velocidad minima (5000 ms)\n";
             }
-            cout << ">> Velocidad reducida (Pausa actual: " << velocidadMs << " ms)\n";
         } else if (tecla == 'q' || tecla == 'Q' || tecla == 27) { // Q o ESC
             ejecutando = false;
             cout << "\n>> Condicion de paro activada por el usuario...\n";
@@ -86,43 +91,20 @@ EstadoCiclo Simulador::ejecutarUnCiclo() {
     return estado;
 }
 
-void Simulador::imprimirEstadoBasico(const EstadoCiclo& estado) const {
-    cout << "\n------------------------------------------------------------\n";
-    cout << "CICLO " << estado.numeroCiclo << " | Pausa: " << estado.velocidadMs
-         << " ms | Controles: [+] Rapido  [-] Lento  [Q/ESC] Salir\n";
-    cout << "------------------------------------------------------------\n";
-    if (estado.entroProceso) {
-        cout << "Entra Proceso " << estado.procesoCandidato.toString() << "\n";
-        cout << estado.mapaTrasEntrada << "\n";
-    } else {
-        cout << "En espera Proceso " << estado.procesoCandidato.toString()
-             << " (Sin espacio suficiente, esperando liberacion)\n";
-    }
-    if (estado.huboEjecucion) {
-        cout << "Atendiendo proceso " << estado.procesoAtendidoPrevio.toString() << "\n";
-        cout << estado.colaRRString << "\n";
-
-        if (estado.procesoTermino) {
-            cout << "Descargando proceso " << estado.procesoDescargado.toString() << "\n";
-            cout << estado.mapaTrasEjecucion << "\n";
-            if (estado.huboCondensacion) {
-                cout << "Condensando huecos\n";
-                cout << estado.mapaTrasCondensacion << "\n";
-            }
-        } else {
-            cout << estado.mapaTrasEjecucion << "\n";
-        }
-    }
-}
-
 void Simulador::iniciar() {
-    cout << "\nMemoria Inicial:\n" << memoria.obtenerMapaString() << "\n";
+    InterfazConsola::mostrarMemoriaInicial(memoria.obtenerMapaString());
+
     while (ejecutando) {
         leerControlesEnVivo();
         if (!ejecutando) break;
+
         EstadoCiclo estadoActual = ejecutarUnCiclo();
-        imprimirEstadoBasico(estadoActual);
-        this_thread::sleep_for(chrono::milliseconds(velocidadMs));
+        InterfazConsola::renderizarCiclo(estadoActual);
+
+        for (int t = 0; t < velocidadMs && ejecutando; t += 50) {
+            leerControlesEnVivo();
+            this_thread::sleep_for(chrono::milliseconds(50));
+        }
     }
     stats.mostrarReporteFinal();
 }

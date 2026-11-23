@@ -18,7 +18,6 @@ private:
 
     void leerControlesEnVivo();
     EstadoCiclo ejecutarUnCiclo();
-    void imprimirEstadoBasico(const EstadoCiclo& estado) const;
 
 public:
     Simulador(const Configuracion& cfg);

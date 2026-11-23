@@ -14,6 +14,7 @@ Simulador::Simulador(const Configuracion& cfg)
       velocidadMs(1000),
       ejecutando(true),
       numeroCiclo(1) {}
+
 void Simulador::leerControlesEnVivo() {
 #ifdef _WIN32
     while (_kbhit()) {
@@ -37,30 +38,38 @@ void Simulador::leerControlesEnVivo() {
 }
 
 EstadoCiclo Simulador::ejecutarUnCiclo() {
-    EstadoCiclo estado;
+    EstadoCiclo estado{};
     estado.numeroCiclo = numeroCiclo;
     estado.velocidadMs = velocidadMs;
+
     Bloque candidato = planificador.getProcesoEnEspera();
     estado.procesoCandidato = candidato;
     bool pudoEntrar = (config.algoritmo == MEJOR_AJUSTE)
         ? memoria.insertarMejorAjuste(candidato)
         : memoria.insertarPeorAjuste(candidato);
     estado.entroProceso = pudoEntrar;
+
     if (pudoEntrar) {
         planificador.confirmarEntradaAMemoria();
     }
     estado.mapaTrasEntrada = memoria.obtenerMapaString();
+
     ResultadoCPU resCPU = planificador.ejecutarCicloCPU(config.cuantoSistema);
     estado.huboEjecucion = resCPU.huboProceso;
     estado.colaRRString = planificador.obtenerColaString();
+
     if (resCPU.huboProceso) {
         estado.procesoAtendidoPrevio = resCPU.procesoAntesDeResta;
         estado.procesoTermino = resCPU.termino;
+
         if (resCPU.termino) {
             estado.procesoDescargado = resCPU.procesoDespuesDeResta;
-            estado.huboCondensacion = memoria.liberarYCondensar(resCPU.procesoDespuesDeResta.id);
+            memoria.liberarProceso(resCPU.procesoDespuesDeResta.id);
             estado.mapaTrasEjecucion = memoria.obtenerMapaString();
-            estado.mapaTrasCondensacion = estado.mapaTrasEjecucion;
+            estado.huboCondensacion = memoria.condensarHuecos();
+            if (estado.huboCondensacion) {
+                estado.mapaTrasCondensacion = memoria.obtenerMapaString();
+            }
             stats.registrarProcesoTerminado(resCPU.procesoDespuesDeResta.ciclosAtendido);
         } else {
             memoria.actualizarCuanto(resCPU.procesoDespuesDeResta.id, resCPU.procesoDespuesDeResta.cuanto);
@@ -71,6 +80,7 @@ EstadoCiclo Simulador::ejecutarUnCiclo() {
         estado.procesoTermino = false;
         estado.huboCondensacion = false;
     }
+
     stats.registrarCiclo(memoria.getMemoriaOcupadaKB(), memoria.getMemoriaTotalKB());
     numeroCiclo++;
     return estado;
@@ -94,11 +104,14 @@ void Simulador::imprimirEstadoBasico(const EstadoCiclo& estado) const {
 
         if (estado.procesoTermino) {
             cout << "Descargando proceso " << estado.procesoDescargado.toString() << "\n";
+            cout << estado.mapaTrasEjecucion << "\n";
             if (estado.huboCondensacion) {
                 cout << "Condensando huecos\n";
+                cout << estado.mapaTrasCondensacion << "\n";
             }
+        } else {
+            cout << estado.mapaTrasEjecucion << "\n";
         }
-        cout << estado.mapaTrasEjecucion << "\n";
     }
 }
 

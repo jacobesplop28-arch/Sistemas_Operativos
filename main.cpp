@@ -9,9 +9,9 @@ int main() {
     Configuracion cfg = InterfazConsola::pedirConfiguracion();
 
     Simulador sim(cfg);
-    sim.correr();
+    sim.iniciar();
 
-    std::cout << endl << "Presione Enter para cerrar...";
+    std::cout << std::endl << "Presione Enter para cerrar...";
     std::cin.ignore();
     std::cin.get();
     return 0;

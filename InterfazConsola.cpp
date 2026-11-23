@@ -3,7 +3,7 @@
 
 Configuracion InterfazConsola::pedirConfiguracion() {
     Configuracion cfg;
-    std::cout << "=== SIMULADOR DE MEMORIA Y ROUND ROBIN ===" << endl;
+    std::cout << "=== SIMULADOR DE MEMORIA Y ROUND ROBIN (EQUIPO 10) ===\n";
 
     do {
         std::cout << "Seleccione algoritmo (" << MEJOR_AJUSTE << " = Mejor Ajuste, "
@@ -36,36 +36,36 @@ Configuracion InterfazConsola::pedirConfiguracion() {
 }
 
 void InterfazConsola::mostrarMemoriaInicial(const std::string& mapaInicial) {
-    std::cout << endl << "Memoria Inicial: " << endl << mapaInicial << endl;
+    std::cout << "\nMemoria Inicial:\n" << mapaInicial << "\n";
 }
 
 void InterfazConsola::renderizarCiclo(const EstadoCiclo& estado) {
-    std::cout << endl << "------------------------------------------------------------" << endl;
+    std::cout << "\n------------------------------------------------------------\n";
     std::cout << "CICLO " << estado.numeroCiclo << " | Vel: " << estado.velocidadMs
-              << "ms | [+] Mas rapido [-] Mas lento [Q] Salir" << endl;
-    std::cout << "------------------------------------------------------------" << endl;
+              << "ms | [+] Mas rapido [-] Mas lento [Q] Salir\n";
+    std::cout << "------------------------------------------------------------\n";
 
     if (estado.entroProceso) {
-        std::cout << "Entra Proceso " << estado.procesoCandidato.toString() << endl;
-        std::cout << estado.mapaTrasEntrada << endl;
+        std::cout << "Entra Proceso " << estado.procesoCandidato.toString() << "\n";
+        std::cout << estado.mapaTrasEntrada << "\n";
     } else {
         std::cout << "En espera Proceso " << estado.procesoCandidato.toString()
-                  << " (Sin hueco suficiente, esperando espacio)" << endl;
+                  << " (Sin hueco suficiente, esperando espacio)\n";
     }
 
     if (estado.huboEjecucion) {
-        std::cout << "Atendiendo proceso " << estado.procesoAtendidoPrevio.toString() << endl;
-        std::cout << estado.colaRRString << endl;
+        std::cout << "Atendiendo proceso " << estado.procesoAtendidoPrevio.toString() << "\n";
+        std::cout << estado.colaRRString << "\n";
 
         if (estado.procesoTermino) {
-            std::cout << "Descargando proceso " << estado.procesoDescargado.toString() << endl;
-            std::cout << estado.mapaTrasEjecucion << endl;
+            std::cout << "Descargando proceso " << estado.procesoDescargado.toString() << "\n";
+            std::cout << estado.mapaTrasEjecucion << "\n";
             if (estado.huboCondensacion) {
                 std::cout << "Condensando huecos\n";
-                std::cout << estado.mapaTrasCondensacion << endl;
+                std::cout << estado.mapaTrasCondensacion << "\n";
             }
         } else {
-            std::cout << estado.mapaTrasEjecucion << endl;
+            std::cout << estado.mapaTrasEjecucion << "\n";
         }
     }
 }

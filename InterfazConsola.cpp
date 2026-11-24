@@ -46,30 +46,30 @@ void InterfazConsola::renderizarCiclo(const EstadoCiclo& estado) {
     std::cout << "------------------------------------------------------------\n";
 
     if (estado.entroProceso) {
-        std::cout << "Entra Proceso " << estado.procesoCandidato.toString() << "\n";
-        std::cout << estado.mapaTrasEntrada << "\n";
+        std::cout << "Entra Proceso " << estado.procesoCandidato.toString() << "\n\n";
+        std::cout << estado.mapaTrasEntrada << "\n\n";
     } else {
         std::cout << "En espera Proceso " << estado.procesoCandidato.toString()
-                  << " (Sin hueco suficiente, esperando espacio)\n";
+                  << " (Sin hueco suficiente, esperando espacio)\n\n";
     }
 
     if (estado.huboEjecucion) {
-        std::cout << "Atendiendo proceso " << estado.procesoAtendidoPrevio.toString() << "\n";
-        std::cout << estado.colaRRString << "\n";
+        std::cout << "Atendiendo proceso " << estado.procesoAtendidoPrevio.toString() << "\n\n";
+        std::cout << estado.colaRRString << "\n\n";
 
         if (estado.procesoTermino) {
-            std::cout << "Descargando proceso " << estado.procesoDescargado.toString() << "\n";
-            std::cout << estado.mapaTrasEjecucion << "\n";
+            std::cout << "Descargando proceso " << estado.procesoDescargado.toString() << "\n\n";
+            std::cout << estado.mapaTrasEjecucion << "\n\n";
             if (estado.huboCondensacion) {
-                std::cout << "Condensando huecos\n";
-                std::cout << estado.mapaTrasCondensacion << "\n";
+                std::cout << "Condensando huecos'\n\n";
+                std::cout << estado.mapaTrasCondensacion << "\n\n";
             }
         } else {
-            std::cout << estado.mapaTrasEjecucion << "\n";
+            std::cout << estado.mapaTrasEjecucion << "\n\n";
         }
     }
 }
 
 void InterfazConsola::mostrarMensaje(const std::string& msg) {
-    std::cout << msg << "\n";
+    std::cout << msg << "\n\n";
 }

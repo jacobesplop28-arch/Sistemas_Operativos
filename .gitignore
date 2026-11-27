@@ -1,0 +1,11 @@
+# Archivos compilados
+*.exe
+*.o
+*.obj
+
+# Librerías
+*.dll
+
+# Archivos basura del sistema
+.DS_Store
+Thumbs.db

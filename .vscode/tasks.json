@@ -8,10 +8,18 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}/*.cpp",
+                "${workspaceFolder}/main.cpp",
+                "${workspaceFolder}/Simulador.cpp",
+                "${workspaceFolder}/GestorMemoria.cpp",
+                "${workspaceFolder}/PlanificadorRR.cpp",
+                "${workspaceFolder}/InterfazConsola.cpp",
+                "${workspaceFolder}/Estadisticas.cpp",
+                "${workspaceFolder}/PantallaCaca.cpp",
                 "-o",
-                "${workspaceFolder}/perriro_amarillo_franjas_naranjas_SO.exe",
+                "${workspaceFolder}/perrito_amarillo_franjas_moradas_SO.exe",
                 "-I", "${workspaceFolder}",
+                "-I", "C:/msys64/ucrt64/include",
+                "-L", "C:/msys64/ucrt64/lib",
                 "-lcaca"
             ],
             "options": {

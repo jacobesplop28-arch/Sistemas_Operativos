@@ -17,23 +17,3 @@ Abre la terminal de **MSYS2 UCRT64** y ejecuta los siguientes comandos para inst
 pacman -S mingw-w64-ucrt-x86_64-gcc
 pacman -S mingw-w64-ucrt-x86_64-libcaca
 pacman -S mingw-w64-ucrt-x86_64-pkg-config
-
-
-#Cómo compilar
-
-1-Abre la carpeta en Visual Studio Code.
-2-Presiona Ctrl + Shift + B.
-3-Se generará el archivo perrito_amarillo_franjas_moradas_SO.exe.
-Nota: Si instalaste MSYS2 en otra ruta, edita las rutas en .vscode/tasks.json.
-
-#Ejecución
-
-Para ejecutarlo correctamente, ábrelo desde la terminal de MSYS2 UCRT64:
-
-```bash
-./perrito_amarillo_franjas_moradas_SO.exe
-
-(Si haces doble clic en el explorador y marca error, copia libcaca-0.dll de C:\msys64\ucrt64\bin a la carpeta del ejecutable)
-
-
-# Para saber como funciona el simulador, consulta el manual de usuario
